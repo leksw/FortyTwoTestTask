@@ -11,7 +11,7 @@ def home_page(request):
         'date_of_birth': 'Feb. 25, 2016',
         'bio': 'I was born ...',
         'email': 'aleks.woronow@yandex.ru',
-        'jabber': 'aleks@42cc.co',
+        'jabber': 'aleksw@42cc.co',
         'skype_id': 'aleks_woronow'}
 
     return render(request, 'home.html', person)
