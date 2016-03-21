@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+<div class="row">
+     <div class="col-md-5">
+          <ul class="list-group">
+               <li class="list-group-item"></li>
+               <li class="list-group-item">Name: Aleks</li>
+               <li class="list-group-item">Surname: Woronow</li>
+               <li class="list-group-item">Date of birth: Feb. 22, 2016</li>
+               <li class="list-group-item">Bio: I was born ...</li>
+          </ul>
+     </div>      
+     <div class="col-md-5">
+          <ul class="list-group">
+               <li class="list-group-item"><strong>Contacts</strong></li>
+               <li class="list-group-item">Email: aleks.woronow@yandex.ru</li>
+               <li class="list-group-item">Jabber: aleks@42cc.co</li>
+               <li class="list-group-item">Skype id: aleks_woronow</li>
+               <li class="list-group-item">Other contacts: {{ person.other }}</li>
+           </ul>
+     </div>
+
+{% endblock content %}
