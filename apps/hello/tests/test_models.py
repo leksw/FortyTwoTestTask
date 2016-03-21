@@ -11,9 +11,11 @@ from ..models import Person
 
 
 class PersonModelTests(TestCase):
+    fixtures = ['data.json']
+
     def setUp(self):
         self.person = Person.objects.create(
-            name='Aleks',
+            name='Leks',
             surname='Woronow',
             email='aleks.woronow@yandex.ru',
             jabber='aleksw@42cc.co',
@@ -65,17 +67,19 @@ class PersonModelTests(TestCase):
                       error_messages['invalid'].format()[12:],
                       err_dict['date_of_birth'][0])
 
-    def test_person_model_initial_data(self):
+    def test_person_model_fixture_data(self):
         """
-        Test check that initial_data is in the database
+        Test check that fixture_data is first in the database
         """
         # now check we can find initial_data in the database
         all_persons = Person.objects.all()
-        self.assertEquals(len(all_persons), 1)
+        self.assertEquals(len(all_persons), 2)
         only_person = all_persons[0]
+        second_person = all_persons[1]
 
-        # and check that it's saved its attributes
+        # and check that it's saved its attributes and fixture data is first
         self.assertEquals(only_person.name, 'Aleks')
+        self.assertEquals(second_person.name, 'Leks')
         self.assertEquals(only_person.surname, 'Woronow')
         self.assertEquals(only_person.email, 'aleks.woronow@yandex.ru')
         self.assertEquals(only_person.jabber, 'aleksw@42cc.co')
