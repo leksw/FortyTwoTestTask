@@ -11,3 +11,7 @@ def home_page(request):
     person = Contact.objects.first()
     context['person'] = person
     return render(request, 'home.html', context)
+
+
+def request_view(request):
+    return render(request, 'requests.html')
