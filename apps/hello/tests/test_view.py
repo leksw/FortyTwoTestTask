@@ -104,3 +104,19 @@ class HomePageTest(TestCase):
                         startswith(b'<!DOCTYPE html>'))
         self.assertIn(b'<title>My card</title>', response.content)
         self.assertTrue(response.content.strip().endswith(b'</html>'))
+
+
+class RequestViewTest(TestCase):
+    def test_request_view(self):
+        """Test request_view"""
+
+        response = self.client.get(reverse('hello:requests'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'requests.html')
+        self.assertIn('Requests', response.content)
+        self.assertIn('Path', response.content)
+        self.assertIn('Method', response.content)
+        self.assertIn('Date', response.content)
+        self.assertIn('/', response.content)
+        self.assertIn('GET', response.content)
