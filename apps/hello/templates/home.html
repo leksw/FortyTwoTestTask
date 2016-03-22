@@ -20,9 +20,16 @@
                <li class="list-group-item">Skype id: {{ person.skype_id }}</li>
                <li class="list-group-item">Other contacts: {{ person.other }}</li>
           </ul>
-     </div>
+    </div>
+</div>    
+<hr style="width: 100%; color: black; height: 2px; background-color:black;" />
+<div class="row">
+  <div class="col-md-6">
+    <a href="{% url 'hello:requests' %}">requests</a>
+ </div>
+</div>
   {% else %}
    <p>Contact data no yet</p>
  {% endif %}
- </div>
+
 {% endblock content %}
