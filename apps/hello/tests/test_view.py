@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpRequest
 
 from ..views import home_page
-from ..models import Contact
+from ..models import Contact, RequestStore
 
 
 class HomePageViewTest(TestCase):
@@ -121,6 +121,7 @@ class RequestViewTest(TestCase):
         self.assertIn('/', response.content)
         self.assertIn('GET', response.content)
 
+
 class RequestAjaxTest(TestCase):
     def test_request_ajax_view(self):
         """Test request ajax view"""
@@ -158,7 +159,7 @@ class RequestAjaxTest(TestCase):
         for i in range(1, 15):
             path = '/test%s' % i
             method = 'GET'
-            RequestStore.objects.create(path=path, method=method, priority=i)
+            RequestStore.objects.create(path=path, method=method)
 
         self.client.get(reverse('hello:home'))
         request_store_count = RequestStore.objects.count()
