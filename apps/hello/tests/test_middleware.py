@@ -9,7 +9,7 @@ from django.contrib.auth.models import AnonymousUser
 
 from apps.middleware.helloRequest import RequestMiddle
 from ..models import RequestStore
-from ..decorators import not_record_request
+from ..decorator import not_record_request
 from ..views import home_page
 
 
