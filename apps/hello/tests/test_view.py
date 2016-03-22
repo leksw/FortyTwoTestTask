@@ -118,8 +118,6 @@ class RequestViewTest(TestCase):
         self.assertIn('Path', response.content)
         self.assertIn('Method', response.content)
         self.assertIn('Date', response.content)
-        self.assertIn('/', response.content)
-        self.assertIn('GET', response.content)
 
 
 class RequestAjaxTest(TestCase):
