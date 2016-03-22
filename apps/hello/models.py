@@ -6,7 +6,7 @@ from django.utils.encoding import python_2_unicode_compatible
 
 
 @python_2_unicode_compatible
-class Person(models.Model):
+class Contact(models.Model):
     name = models.CharField('name', max_length=250)
     surname = models.CharField('surname', max_length=250)
     date_of_birth = models.DateField('date of birth')

@@ -14,8 +14,8 @@ class Migration(DataMigration):
         "Write your backwards methods here."
 
     models = {
-        u'hello.person': {
-            'Meta': {'object_name': 'Person'},
+        u'hello.contact': {
+            'Meta': {'object_name': 'Contact'},
             'bio': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'date_of_birth': ('django.db.models.fields.DateField', [], {}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75'}),

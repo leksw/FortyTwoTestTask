@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpRequest
 
 from ..views import home_page
-from ..models import Person
+from ..models import Contact
 
 
 class HomePageViewTest(TestCase):
@@ -31,7 +31,7 @@ class HomePageViewTest(TestCase):
 
 class HomePageTest(TestCase):
     def setUp(self):
-        self.person = Person.objects.create(
+        self.person = Contact.objects.create(
             name='Aleks',
             surname='Woronow',
             email='aleks.woronow@yandex.ru',
@@ -63,7 +63,7 @@ class HomePageTest(TestCase):
         that db has more than 1 instance
         """
         # Create second person
-        Person.objects.create(
+        Contact.objects.create(
             name='Ivan',
             surname='Ivanov',
             email='ivan@yandex.ru',
@@ -73,7 +73,7 @@ class HomePageTest(TestCase):
             bio='I was born ...')
 
         # Check that two person in db
-        all_persons = Person.objects.all()
+        all_persons = Contact.objects.all()
         self.assertEquals(len(all_persons), 2)
         first_person = all_persons[0]
 
@@ -89,7 +89,7 @@ class HomePageTest(TestCase):
         if db has not person instance
         """
         # Delete all the Person instance
-        Person.objects.all().delete()
+        Contact.objects.all().delete()
 
         # home page displays "Contact data no yet"
         response = self.client.get(reverse('hello:home'))

@@ -8,8 +8,8 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Person'
-        db.create_table(u'hello_person', (
+        # Adding model 'Contact'
+        db.create_table(u'hello_contact', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=250)),
             ('surname', self.gf('django.db.models.fields.CharField')(max_length=250)),
@@ -20,17 +20,17 @@ class Migration(SchemaMigration):
             ('skype_id', self.gf('django.db.models.fields.CharField')(max_length=250, blank=True)),
             ('other', self.gf('django.db.models.fields.TextField')(blank=True)),
         ))
-        db.send_create_signal(u'hello', ['Person'])
+        db.send_create_signal(u'hello', ['Contact'])
 
 
     def backwards(self, orm):
-        # Deleting model 'Person'
-        db.delete_table(u'hello_person')
+        # Deleting model 'Contact'
+        db.delete_table(u'hello_contact')
 
 
     models = {
-        u'hello.person': {
-            'Meta': {'object_name': 'Person'},
+        u'hello.contact': {
+            'Meta': {'object_name': 'Contact'},
             'bio': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'date_of_birth': ('django.db.models.fields.DateField', [], {}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75'}),

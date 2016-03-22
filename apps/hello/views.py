@@ -3,11 +3,11 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 
-from .models import Person
+from .models import Contact
 
 
 def home_page(request):
     context = {}
-    person = Person.objects.first()
+    person = Contact.objects.first()
     context['person'] = person
     return render(request, 'home.html', context)

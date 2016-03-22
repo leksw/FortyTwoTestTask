@@ -7,14 +7,14 @@ from django.test import TestCase
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 
-from ..models import Person
+from ..models import Contact
 
 
-class PersonModelTests(TestCase):
+class ContactModelTests(TestCase):
     fixtures = ['data.json']
 
     def setUp(self):
-        self.person = Person.objects.create(
+        self.person = Contact.objects.create(
             name='Leks',
             surname='Woronow',
             email='aleks.woronow@yandex.ru',
@@ -23,11 +23,11 @@ class PersonModelTests(TestCase):
             date_of_birth=date(2016, 2, 25),
             bio='I was born ...')
 
-    def test_person_model_blank_fields_validation(self):
+    def test_contact_model_blank_fields_validation(self):
         """
-        Test check validation blank fields person model
+        Test check validation blank fields contact model
         """
-        person = Person()
+        person = Contact()
 
         # test model blank and null fields validation
         with self.assertRaises(ValidationError) as err:
@@ -35,23 +35,23 @@ class PersonModelTests(TestCase):
         err_dict = err.exception.message_dict
         self.assertEquals(
             err_dict['name'][0],
-            Person._meta.get_field('name').error_messages['blank'])
+            Contact._meta.get_field('name').error_messages['blank'])
         self.assertEquals(
             err_dict['surname'][0],
-            Person._meta.get_field('surname').error_messages['blank'])
+            Contact._meta.get_field('surname').error_messages['blank'])
         self.assertEquals(
             err_dict['email'][0],
-            Person._meta.get_field('email').error_messages['blank'])
+            Contact._meta.get_field('email').error_messages['blank'])
         self.assertEquals(
             err_dict['date_of_birth'][0],
-            Person._meta.get_field('date_of_birth').
+            Contact._meta.get_field('date_of_birth').
             error_messages['null'])
 
-    def test_person_model_email_date_field_validation(self):
+    def test_contact_model_email_date_field_validation(self):
         """
-        Test check validation email and date fields person model
+        Test check validation email and date fields contact model
         """
-        person = Person()
+        person = Contact()
         # test model email and date field validation
         person.email = 'aleks@'
         person.jabber = '42cc'
@@ -63,16 +63,16 @@ class PersonModelTests(TestCase):
                           EmailValidator.message)
         self.assertEquals(err_dict['jabber'][0],
                           EmailValidator.message)
-        self.assertIn(Person._meta.get_field('date_of_birth').
+        self.assertIn(Contact._meta.get_field('date_of_birth').
                       error_messages['invalid'].format()[12:],
                       err_dict['date_of_birth'][0])
 
-    def test_person_model_fixture_data(self):
+    def test_contact_model_fixture_data(self):
         """
         Test check that fixture_data is first in the database
         """
         # now check we can find initial_data in the database
-        all_persons = Person.objects.all()
+        all_persons = Contact.objects.all()
         self.assertEquals(len(all_persons), 2)
         only_person = all_persons[0]
         second_person = all_persons[1]
