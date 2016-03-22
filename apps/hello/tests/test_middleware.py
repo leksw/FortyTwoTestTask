@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import AnonymousUser
 
 from apps.middleware.helloRequest import RequestMiddle
-from ..models import RequestStore
+from ..models import RequestsStore
 from ..decorator import not_record_request
 from ..views import home_page
 
@@ -19,7 +19,7 @@ class RequestMiddlewareTests(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         self.middleware = RequestMiddle()
-        self.request_store = RequestStore
+        self.request_store = RequestsStore
         self.user = get_user_model().objects.get(id=1)
 
     def test_middleware_is_included(self):
@@ -37,7 +37,7 @@ class RequestMiddlewareTests(TestCase):
         decorated_func = not_record_request(home_page)
         request.user = self.user
         self.middleware.process_view(request,  decorated_func)
-        rs = RequestStore.objects.all()
+        rs = RequestsStore.objects.all()
         self.assertQuerysetEqual(rs, [])
 
         # middleware store request to undecorated function

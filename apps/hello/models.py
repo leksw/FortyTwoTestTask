@@ -24,7 +24,7 @@ class Contact(models.Model):
 
 
 @python_2_unicode_compatible
-class RequestStore(models.Model):
+class RequestsStore(models.Model):
     path = models.CharField(max_length=250)
     method = models.CharField(max_length=10)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,

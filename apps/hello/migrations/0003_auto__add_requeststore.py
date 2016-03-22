@@ -8,8 +8,8 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'RequestStore'
-        db.create_table(u'hello_requeststore', (
+        # Adding model 'RequestsStore'
+        db.create_table(u'hello_requestsstore', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('path', self.gf('django.db.models.fields.CharField')(max_length=250)),
             ('method', self.gf('django.db.models.fields.CharField')(max_length=10)),
@@ -17,12 +17,12 @@ class Migration(SchemaMigration):
             ('date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('new_request', self.gf('django.db.models.fields.PositiveIntegerField')(default=1)),
         ))
-        db.send_create_signal(u'hello', ['RequestStore'])
+        db.send_create_signal(u'hello', ['RequestsStore'])
 
 
     def backwards(self, orm):
-        # Deleting model 'RequestStore'
-        db.delete_table(u'hello_requeststore')
+        # Deleting model 'RequestsStore'
+        db.delete_table(u'hello_requestsstore')
 
 
     models = {
@@ -74,8 +74,8 @@ class Migration(SchemaMigration):
             'skype_id': ('django.db.models.fields.CharField', [], {'max_length': '250', 'blank': 'True'}),
             'surname': ('django.db.models.fields.CharField', [], {'max_length': '250'})
         },
-        u'hello.requeststore': {
-            'Meta': {'ordering': "[u'-date']", 'object_name': 'RequestStore'},
+        u'hello.requestsstore': {
+            'Meta': {'ordering': "[u'-date']", 'object_name': 'RequestsStore'},
             'date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'method': ('django.db.models.fields.CharField', [], {'max_length': '10'}),

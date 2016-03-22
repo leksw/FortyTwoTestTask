@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpRequest
 
 from ..views import home_page
-from ..models import Contact, RequestStore
+from ..models import Contact, RequestsStore
 
 
 class HomePageViewTest(TestCase):
@@ -141,7 +141,7 @@ class RequestAjaxTest(TestCase):
         response = self.client.get(reverse('hello:requests_ajax'),
                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         # check that db is empty
-        request_store_count = RequestStore.objects.count()
+        request_store_count = RequestsStore.objects.count()
         self.assertGreaterEqual(request_store_count, 0)
         # check response is empty too
         self.assertIn('0', response.content)
@@ -157,14 +157,14 @@ class RequestAjaxTest(TestCase):
         for i in range(1, 15):
             path = '/test%s' % i
             method = 'GET'
-            RequestStore.objects.create(path=path, method=method)
+            RequestsStore.objects.create(path=path, method=method)
 
         self.client.get(reverse('hello:home'))
-        request_store_count = RequestStore.objects.count()
+        request_store_count = RequestsStore.objects.count()
         self.assertGreaterEqual(request_store_count, 1)
 
         # check number of objects in db
-        req_list = RequestStore.objects.count()
+        req_list = RequestsStore.objects.count()
         self.assertEqual(req_list, i+1)
 
         # check that 10 objects in response

@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 import logging
 
-from apps.hello.models import RequestStore
+from apps.hello.models import RequestsStore
 
 
 logger = logging.getLogger(__name__)
@@ -14,7 +14,7 @@ class RequestMiddle(object):
         log_msg = '%s %s' % (request.method, request.path)
 
         if not getattr(view_func, 'not_record', False):
-            req = RequestStore()
+            req = RequestsStore()
             req.path = request.path
             req.method = request.method
 
