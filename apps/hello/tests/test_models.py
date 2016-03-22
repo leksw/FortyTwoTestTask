@@ -6,6 +6,7 @@ from datetime import date
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
+from django.contrib.auth import get_user_model
 
 from ..models import Contact, RequestStore
 
@@ -90,6 +91,8 @@ class ContactModelTests(TestCase):
 
 
 class RequestStoreTest(TestCase):
+    fixtures = ['data.json']
+
     def test_request_store(self):
         """Test creating a new request and saving it to the database"""
 
