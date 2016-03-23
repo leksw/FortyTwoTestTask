@@ -9,7 +9,7 @@
               <li class="list-group-item">Name: {{ person.name }}</li>
                <li class="list-group-item">Surname: {{ person.surname }}</li>
                <li class="list-group-item">Date of birth: {{ person.date_of_birth }}</li>
-               <li class="list-group-item">Bio: {{ person.bio }}</li>
+               <li class="list-group-item">Bio: {{ person.bio|linebreaks }}</li>
           </ul>
      </div>      
      <div class="col-md-6">
@@ -18,7 +18,7 @@
                <li class="list-group-item">Email: {{ person.email }}</li>
                <li class="list-group-item">Jabber: {{ person.jabber }}</li>
                <li class="list-group-item">Skype id: {{ person.skype_id }}</li>
-               <li class="list-group-item">Other contacts: {{ person.other }}</li>
+               <li class="list-group-item">Other contacts: {{ person.other|linebreaks }}</li>
           </ul>
      </div>
   {% else %}
