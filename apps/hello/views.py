@@ -35,3 +35,7 @@ def request_ajax(request):
         return HttpResponse(data, content_type="application/json")
 
     return HttpResponseBadRequest('Error request')
+
+
+def form_page(request):
+    return render(request, 'edit_form.html')
