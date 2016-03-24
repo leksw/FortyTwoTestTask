@@ -9,7 +9,6 @@ from django.test import TestCase
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from django.contrib.auth import get_user_model
-from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from ..models import Contact, RequestsStore
