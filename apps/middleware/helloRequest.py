@@ -25,5 +25,3 @@ class RequestMiddle(object):
             logger.info(log_msg + ' was saved')
         else:
             logger.info(log_msg + ' wasn\'t saved')
-
-        return None
