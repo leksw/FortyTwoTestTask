@@ -9,6 +9,17 @@ from django.http import HttpRequest
 
 from ..views import home_page
 from ..models import Contact, RequestsStore
+from .test_models import get_temporary_image
+
+
+# create text file for test
+def get_temporary_text_file(name):
+    io = StringIO.StringIO()
+    io.write('test')
+    text_file = InMemoryUploadedFile(
+        io, None, name, 'text', io.len, None)
+    text_file.seek(0)
+    return text_file
 
 
 class HomePageViewTest(TestCase):
@@ -176,3 +187,108 @@ class RequestAjaxTest(TestCase):
         self.assertNotIn('/test4', response.content)
         self.assertIn('/test6', response.content)
         self.assertIn('/', response.content)
+
+
+class FormPageTest(TestCase):
+    def setUp(self):
+        self.person = Contact.objects.first()
+        self.data = dict(name='Ivan', surname='Ivanov',
+                         date_of_birth='2016-02-02',
+                         bio='', email='ivanov@yandex.ru',
+                         jabber='iv@jabb.com',
+                         image=get_temporary_image())
+
+    def test_form_page_view(self):
+        """
+        Test check access to form page only authenticate
+        users and it used template request.html.
+        """
+
+        # if user is not authenticate
+        response = self.client.get(reverse('hello:form'))
+        self.assertEqual(response.status_code, 302)
+
+        # after authentication
+        self.client.login(username='admin', password='admin')
+        response = self.client.get(reverse('hello:form'))
+        self.assertTemplateUsed(response, 'person_form.html')
+
+    def test_form_page_edit_data(self):
+        """Test check edit data at form page."""
+
+        # login on the site
+        self.client.login(username='admin', password='admin')
+
+        # send new data to server
+        response = self.client.post(reverse('hello:form'), self.data,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+
+        response = self.client.get(reverse('hello:form'))
+        self.assertEqual(response.status_code, 200)
+
+        # data are shown at form page according to changed data
+        self.assertNotIn(self.person.name, response.content)
+        self.assertNotIn(self.person.surname, response.content)
+        self.assertNotIn(self.person.date_of_birth.strftime('%Y-%m-%d'),
+                         response.content)
+        self.assertNotIn(self.person.email, response.content)
+        self.assertNotIn(self.person.jabber, response.content)
+
+        self.assertIn('Ivan', response.content)
+        self.assertIn('Ivanov', response.content)
+        self.assertIn('2016-02-02', response.content)
+        self.assertIn('ivanov@yandex.ru', response.content)
+        self.assertIn('iv@jabb.com', response.content)
+        self.assertIn('test.jpg', response.content)
+
+    def test_form_page_on_text_file(self):
+        """
+        Test check form_page return error if upload text file.
+        """
+
+        # add to data text file text.txt
+        self.data.update({'image': get_temporary_text_file('text.txt')})
+
+        self.client.login(username='admin', password='admin')
+        response = self.client.post(reverse('hello:form'), self.data,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(400, response.status_code)
+        self.assertIn('Upload a valid image. The file you uploaded',
+                      response.content)
+
+        # add to data text file text.jpg
+        self.data.update({'image': get_temporary_text_file('text.jpg')})
+
+        self.client.login(username='admin', password='admin')
+        response = self.client.post(reverse('hello:form'), self.data,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(400, response.status_code)
+        self.assertIn('Upload a valid image. The file you uploaded',
+                      response.content)
+
+    def test_form_page_edit_data_to_wrong(self):
+        """Test check edit data at form page to wrong data."""
+
+        # check enter empty name and invalid data_of_birth, email
+        # login on the site
+        self.client.login(username='admin', password='admin')
+
+        # edit data with empty name and invalid data_of_birth, email
+        self.data.update({'name': '',
+                          'date_of_birth': 'date',
+                          'email': 'ivanovyandex.ru'})
+
+        # send new data to server
+        response = self.client.post(reverse('hello:form'), self.data,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 400)
+
+        # response errors
+        self.assertIn('This field is required.', response.content)
+        self.assertIn('Enter a valid date.', response.content)
+        self.assertIn('Enter a valid email address.', response.content)
+
+        # data in db did not change
+        edit_person = Contact.objects.first()
+        self.assertEqual(self.person.name, edit_person.name)
+
