@@ -2,10 +2,12 @@
 from __future__ import unicode_literals
 
 from datetime import date
+import StringIO
 
 from django.test import TestCase, RequestFactory
 from django.core.urlresolvers import reverse
 from django.http import HttpRequest
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from ..views import home_page
 from ..models import Contact, RequestsStore
@@ -190,6 +192,8 @@ class RequestAjaxTest(TestCase):
 
 
 class FormPageTest(TestCase):
+    fixtures = ['data.json']
+
     def setUp(self):
         self.person = Contact.objects.first()
         self.data = dict(name='Ivan', surname='Ivanov',
@@ -211,7 +215,7 @@ class FormPageTest(TestCase):
         # after authentication
         self.client.login(username='admin', password='admin')
         response = self.client.get(reverse('hello:form'))
-        self.assertTemplateUsed(response, 'person_form.html')
+        self.assertTemplateUsed(response, 'edit_form.html')
 
     def test_form_page_edit_data(self):
         """Test check edit data at form page."""
@@ -291,4 +295,3 @@ class FormPageTest(TestCase):
         # data in db did not change
         edit_person = Contact.objects.first()
         self.assertEqual(self.person.name, edit_person.name)
-

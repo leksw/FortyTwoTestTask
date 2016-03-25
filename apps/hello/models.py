@@ -36,7 +36,10 @@ class Contact(models.Model):
 
     def save(self, *args, **kwargs):
         if self.image:
-            image = Img.open(StringIO.StringIO(self.image.read()))
+            try:
+                image = Img.open(StringIO.StringIO(self.image.read()))
+            except ValueError:
+                return super(Contact, self).save(*args, **kwargs)
             image.thumbnail((200, 200), Img.ANTIALIAS)
             output = StringIO.StringIO()
             image.save(output, format='JPEG', quality=75)

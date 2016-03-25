@@ -4,40 +4,42 @@
 {% block content %}
 <div class="row">
     <form class="form-horizontal" id="person-form" action="{% url 'hello:form' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
-
+      {{ form.media }}
         <div class="col-md-6">
             <div class="form-group">
                 <label for="id_name" class="col-sm-2 control-label">Name</label>
                 <div class="col-sm-8">
-                  
-                  <input class="form-control" id="id_name" maxlength="250" name="name" type="text" value="Aleks" />
+                  {{ form.name.errors }}
+                  {{ form.name }}
                 </div>
             </div>
             <div class="form-group">
                <label for="id_surname" class="col-sm-2 control-label">Surname</label>
                 <div class="col-sm-8">
-                   
-                  <input class="form-control" id="id_surname" maxlength="250" name="surname" type="text" value="Woronow" />
+                  {{ form.surname.errors }} 
+                  {{ form.surname }}
                 </div>
             </div>
             <div class="form-group">
                 <label for="id_date_of_birth" class="col-sm-2 control-label">Date of birth</label>
                 <div class="col-sm-8">
-                  
-                  <input class="form-control datepicker" id="id_date_of_birth" name="date_of_birth" size="10" type="text" value="2016-02-25" />
+                  {{ form.date_of_birth.errors }}
+                  {{ form.date_of_birth }}
                 </div>
             </div>
             <div class="form-group">
                 <label for="id_photo" class="col-sm-2 control-label">Photo</label>
                 <div class="col-sm-8">
-                   <input id="id_image" name="image" type="file" />
-              <div id="error_photo" class="has-error"></div>
+                   {{ form.image }}
+              <div id="error_{{ form.image.label|lower}}" class="has-error"></div>
             </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-10">
                    <img  id="personImage" class="img-thumbnail" 
-                        src=""
+                        src="{% if form.image.value %}
+                             {{ form.image.value.url }}
+                        {% endif %}"
                         alt="Towel test photo">
                 </div>
             </div>
@@ -46,41 +48,39 @@
             <div class="form-group">
                 <label for="id_email" class="col-sm-2 control-label">Email</label>
                 <div class="col-sm-10">
-                  
-                  <input class="form-control" id="id_email" maxlength="75" name="email" type="email" value="aleks.woronow@yandex.ru" />
+                  {{ form.email.errors }}
+                  {{ form.email }}
                 </div>
             </div>
             <div class="form-group">
                 <label for="id_jabber" class="col-sm-2 control-label">Jabber</label>
                 <div class="col-sm-10">
-                  <input class="form-control" id="id_jabber" maxlength="75" name="jabber" type="email" value="aleksw@42cc.co" />
+                  {{ form.jabber }}
                 </div>
             </div>
             <div class="form-group">
                 <label for="id_skype_id" class="col-sm-2 control-label">Skype id</label>
                 <div class="col-sm-10">
-                  
-                 <input class="form-control" id="id_skype_id" maxlength="250" name="skype_id" type="text" value="aleks_woronow" />
+                 {{ form.skype_id.errors }} 
+                 {{ form.skype_id }}
                 </div>
             </div>
             <div class="form-group">
                 <label for="id_other" class="col-sm-2 control-label">Other contacts</label>
                 <div class="col-sm-10">
-                    
-                  <textarea class="form-control" cols="40" id="id_other" name="other" rows="10">
-</textarea>
+                  {{ form.other.errors }}  
+                  {{ form.other }}
                 </div>
             </div>
             <div class="form-group">
                 <label for="id_bio" class="col-sm-2 control-label">Bio</label>
                 <div class="col-sm-10">
-                 
-                 <textarea class="form-control" cols="40" id="id_bio" name="bio" rows="10">
-I was born ...</textarea>
+                 {{ form.bio.errors }}
+                 {{ form.bio }}
                 </div>
             </div>
         </div>
-</div>
+</div>    
 <div class="row">
     <div class="col-md-4">
         <div class="progress" id="loading" style="display:none;">
@@ -95,7 +95,7 @@ I was born ...</textarea>
             <span>Can not submit data due to errors.</span>
         </div>
     </div>
-</div>    
+</div>       
 <div class="row">
      <button class="btn btn btn-primary" type="submit">Save</button>
      <button class="btn btn btn-primary" id='cancel' type="reset">Cancel</button>
@@ -103,18 +103,15 @@ I was born ...</textarea>
 </form>
 <div id="form-loading"></div>
 
-<hr style="width: 100%; color: black; height: 2px; background-color:black;" />
+ <hr style="width: 100%; color: black; height: 2px; background-color:black;" />
  <div class="row">
       <div class="col-md-6">
         <a href="{% url 'hello:requests' %}">requests</a>
      </div>
  </div>
- </div>     
- </div>
-
+ 
 {% endblock content %}
 {% block script %}
     <script src="{% static 'jquery/jquery.validate.min.js' %}"></script>
     <script src="{% static 'jquery/additional-methods.min.js' %}"></script>
-    <script src="{% static 'js/change_contact.js' %}"></script>
 {% endblock script %}
