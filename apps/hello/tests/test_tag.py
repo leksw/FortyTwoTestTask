@@ -6,10 +6,12 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import Permission
 
 from ..templatetags.edit_link import edit_link
-from ..models import Person
+from ..models import Contact
 
 
 class TagAdminLinkTest(TestCase):
+    fixtures = ['data.json']
+
     def test_edit_link_tag_is_at_home_page(self):
         """
         Test check tag is on home page
@@ -17,14 +19,14 @@ class TagAdminLinkTest(TestCase):
         self.client.login(username='admin', password='admin')
         response = self.client.get(reverse('hello:home'))
         self.assertIn(
-            '<a href="/admin/hello/person/1/">(admin)</a>', response.content)
+            '<a href="/admin/hello/contact/1/">(admin)</a>', response.content)
 
     def test_edit_link_tag_recive_model_that_register_admin(self):
         """
         Test check tag if it recive model that register in admin
         """
         # test edit_link recive instance model that register admin
-        person = Person.objects.first()
+        person = Contact.objects.first()
         link_person_one = edit_link(person)['edit_link']
 
         self.client.login(username='admin', password='admin')
