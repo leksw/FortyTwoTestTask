@@ -1,35 +1,55 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
 {% block content %}
+
 <div class="row">
-   {% if person %}
-     <div class="col-md-6">
+     {% if person %}
+     <div class="col-md-5">
           <ul class="list-group">
                <li class="list-group-item"></li>
-              <li class="list-group-item">Name: {{ person.name }}</li>
+               <li class="list-group-item">Name: {{ person.name }}</li>
                <li class="list-group-item">Surname: {{ person.surname }}</li>
                <li class="list-group-item">Date of birth: {{ person.date_of_birth }}</li>
-               <li class="list-group-item">Bio: {{ person.bio|linebreaks }}</li>
+               <li class="list-group-item">Photo:</li>
+               <li class="list-group-item">
+                     <img class="img-thumbnail" src="{% if person.image %}{{ person.image.url }}{% endif %}" 
+                         width="{{person.gauge_height.w}}" height="{{person.gauge_height.h}}"
+                         alt="Towel test photo">
           </ul>
      </div>      
-     <div class="col-md-6">
+     <div class="col-md-5">
           <ul class="list-group">
                <li class="list-group-item"><strong>Contacts</strong></li>
                <li class="list-group-item">Email: {{ person.email }}</li>
                <li class="list-group-item">Jabber: {{ person.jabber }}</li>
                <li class="list-group-item">Skype id: {{ person.skype_id }}</li>
                <li class="list-group-item">Other contacts: {{ person.other|linebreaks }}</li>
+               {% if not person.other %}
+               <li class="list-group-item"></li>
+               <li class="list-group-item"></li>
+               <li class="list-group-item"></li>
+               <li class="list-group-item"></li>
+               {% endif %}
+               <li class="list-group-item">Bio: {{ person.bio|linebreaks }}</li>
           </ul>
-    </div>
-</div>    
-<hr style="width: 100%; color: black; height: 2px; background-color:black;" />
-<div class="row">
-  <div class="col-md-6">
-    <a href="{% url 'hello:requests' %}">requests</a>
+     </div>
+     <div class="col-md-2">
+          {% if user.is_authenticated %}
+            <a href="{% url 'hello:form' %}">Edit</a> |
+             <a href="{% url 'logout' %}?next={% url 'hello:home' %}" style="white-space: nowrap;">Log out</a> 
+          {% else %}
+            <a href="{% url 'login' %}">login</a> 
+          {% endif %}
+     </div>     
  </div>
-</div>
-  {% else %}
+ <hr style="width: 100%; color: black; height: 2px; background-color:black;" />
+ <div class="row">
+      <div class="col-md-6">
+        <a href="{% url 'hello:requests' %}">requests</a>
+     </div>
+ </div>
+ {% else %}
    <p>Contact data no yet</p>
  {% endif %}
-
 {% endblock content %}
