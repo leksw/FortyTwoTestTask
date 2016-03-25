@@ -11,7 +11,7 @@ from django.core.validators import EmailValidator
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
-from ..models import Contact, RequestsStore
+from ..models import Contact, RequestsStore, NoteModel
 
 
 # create image file for test
@@ -257,4 +257,3 @@ class NoteModelTestCase(TestCase):
         self.assertEqual(len(all_note), 1)
         only_note = all_note[0]
         self.assertEqual(only_note.model, 'RequestStore')
-
