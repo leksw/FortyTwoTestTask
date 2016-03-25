@@ -110,7 +110,28 @@ class RequestViewTest(TestCase):
     def test_request_view(self):
         """Test request_view"""
 
+        # send request to home page
+        self.client.get(reverse('hello:home'))
+
+        # take home request from db  
+        all_requests = RequestsStore.objects.all()
+        self.assertEquals(len(all_requests), 1)
+        home_request = all_requests[0]
+
+        # check that new_request = 1
+        self.assertEquals(home_request.path, '/')
+        self.assertEquals(home_request.new_request, 1)
+
+        # send request to requests page
         response = self.client.get(reverse('hello:requests'))
+
+        # check that new_request = 1
+        all_requests = RequestsStore.objects.all()
+        self.assertEquals(len(all_requests), 2)
+        home_request = all_requests[1]
+
+        self.assertEquals(home_request.path, '/')
+        self.assertEquals(home_request.new_request, 0)
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'requests.html')
