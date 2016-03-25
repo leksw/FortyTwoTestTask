@@ -113,7 +113,7 @@ class RequestViewTest(TestCase):
         # send request to home page
         self.client.get(reverse('hello:home'))
 
-        # take home request from db  
+        # take home request from db
         all_requests = RequestsStore.objects.all()
         self.assertEquals(len(all_requests), 1)
         home_request = all_requests[0]
