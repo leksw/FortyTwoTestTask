@@ -160,3 +160,101 @@ class RequestsStoreTest(TestCase):
         self.assertEquals(only_request.method, 'GET')
         self.assertEquals(only_request.new_request, 1)
         self.assertEquals(only_request.user, user)
+
+
+class NoteModelTestCase(TestCase):
+    fixtures = ['data.json']
+
+    def setUp(self):
+        self.data = dict(model='Contact', inst='contact', action_type=0)
+
+    def test_notemodel(self):
+        """
+        Test creat, change and delete object notemodel.
+        """
+        # create note about person
+        note_person = NoteModel.objects.create(**self.data)
+
+        # take all objects of NoteModel: one - load fixture, two - test
+        all_note = NoteModel.objects.all()
+        self.assertEqual(len(all_note), 2)
+        only_note = all_note[1]
+        self.assertEqual(only_note.model, note_person.model)
+        self.assertEqual(only_note.action_type, 0)
+
+        # change note about person to requeststore
+        person_note = NoteModel.objects.get(id=note_person.id)
+        person_note.model = 'RequestStore'
+        person_note.inst = 'requeststore'
+        person_note.action_type = 1
+        person_note.save()
+
+        # now note about requeststore action = 1
+        person_note_change = NoteModel.objects.get(model='RequestStore')
+        self.assertEqual(person_note_change.action_type, 1)
+
+        # delete note person
+        NoteModel.objects.all().delete()
+        all_note = NoteModel.objects.all()
+        self.assertEqual(all_note.count(), 0)
+
+    def test_signal_processor_creates_entry_db(self):
+        """
+        Test signal processor records create,
+        change and delete object.
+        """
+        # check action_type after created object (loaded fixtures) is 0
+        note = NoteModel.objects.get(model='Contact')
+        self.assertEqual(note.action_type, 0)
+
+        # check action_type after change object is 1
+        person = Contact.objects.first()
+        person.name = 'Change'
+        person.save()
+        note = NoteModel.objects.filter(model='Contact').last()
+        self.assertEqual(note.action_type, 1)
+
+        # check record after delete object is 2
+        person = Contact.objects.first()
+        person.delete()
+        note = NoteModel.objects.last()
+        self.assertEqual(note.action_type, 2)
+
+    def test_processor_not_creates_entry_db_if_delete_inst_NoteModel(self):
+        """
+        Test signal processor not records create,
+        change and delete instance of NoteModel.
+        """
+        # check created object after loaded fixtures
+        all_note = NoteModel.objects.all()
+        self.assertEqual(len(all_note), 1)
+        only_note = all_note[0]
+        self.assertEqual(only_note.model, 'Contact')
+
+        # delete object Person
+        only_note.delete()
+
+        # now NoteModel is empty
+        self.assertEqual(NoteModel.objects.count(), 0)
+
+    def test_processor_not_creates_entry_db_if_change_inst_NoteModel(self):
+        """
+        Test signal processor not records change,
+        delete instance of NoteModel.
+        """
+        # check created object after loaded fixtures
+        all_note = NoteModel.objects.all()
+        self.assertEqual(len(all_note), 1)
+        only_note = all_note[0]
+        self.assertEqual(only_note.model, 'Contact')
+
+        # change object Person
+        only_note.model = 'RequestStore'
+        only_note.save()
+
+        # now NoteModel has only one instance
+        all_note = NoteModel.objects.all()
+        self.assertEqual(len(all_note), 1)
+        only_note = all_note[0]
+        self.assertEqual(only_note.model, 'RequestStore')
+
