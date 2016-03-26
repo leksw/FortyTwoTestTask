@@ -13,6 +13,9 @@ var helloRequest = (function($){
                     + '<td>' + val.fields.path + '</td>'
                     + '<td>' + val.fields.method + '</td>'
                     + '<td>' + val.fields.date + '</td>'
+                    + '<td>' + 0 + '</td>'
+                    + '<td>UP</td>'
+                    + '<td>Down</td>'
                     + '</tr>'
         );
         
