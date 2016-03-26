@@ -138,12 +138,12 @@ class RequestViewTest(TestCase):
         # send request to requests page
         response = self.client.get(reverse('hello:requests'))
 
-        # check that new_request = 1
+        # check that new_request = 0
         all_requests = RequestsStore.objects.all()
         self.assertEquals(len(all_requests), 2)
         home_request = all_requests[1]
 
-        self.assertEquals(home_request.path, '/')
+        self.assertEquals(home_request.path, '/requests/')
         self.assertEquals(home_request.new_request, 0)
 
         self.assertEqual(response.status_code, 200)
@@ -191,7 +191,7 @@ class RequestAjaxTest(TestCase):
         for i in range(1, 15):
             path = '/test%s' % i
             method = 'GET'
-            RequestsStore.objects.create(path=path, method=method)
+            RequestsStore.objects.create(path=path, method=method, priority=i)
 
         self.client.get(reverse('hello:home'))
         request_store_count = RequestsStore.objects.count()

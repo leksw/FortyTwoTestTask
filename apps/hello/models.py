@@ -73,12 +73,13 @@ class RequestsStore(models.Model):
                              null=True)
     date = models.DateTimeField(auto_now_add=True)
     new_request = models.PositiveIntegerField(default=1)
+    priority = models.PositiveIntegerField(blank=True, null=True, default=0)
 
     def __unicode__(self):
         return "%s - %s" % (self.path, self.method)
 
     class Meta:
-        ordering = ["-date"]
+        ordering = ["-priority"]
 
 
 class NoteModel(models.Model):

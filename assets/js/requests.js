@@ -10,12 +10,12 @@ var helloRequest = (function($){
             req_class = 'info';
         }
         items.push('<tr class="' + req_class + '">'
-                    + '<td>' + val.fields.path + '</td>'
+                    + '<td class="path">' + val.fields.path + '</td>'
                     + '<td>' + val.fields.method + '</td>'
                     + '<td>' + val.fields.date + '</td>'
-                    + '<td>' + 0 + '</td>'
-                    + '<td>UP</td>'
-                    + '<td>Down</td>'
+                    + '<td class="priority">' + val.fields.priority + '</td>'
+                    + '<td class="td_click">Up</td>'
+                    + '<td class="td_click">Down</td>'
                     + '</tr>'
         );
         
