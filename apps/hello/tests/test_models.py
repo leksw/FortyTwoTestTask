@@ -175,10 +175,12 @@ class NoteModelTestCase(TestCase):
         # create note about person
         note_person = NoteModel.objects.create(**self.data)
 
-        # take all objects of NoteModel: one - load fixture, two - test
+        # take all objects of NoteModel
         all_note = NoteModel.objects.all()
-        self.assertEqual(len(all_note), 2)
-        only_note = all_note[1]
+        self.assertEqual(len(all_note), 13)
+
+        # take note about person
+        only_note = all_note[12]
         self.assertEqual(only_note.model, note_person.model)
         self.assertEqual(only_note.action_type, 0)
 
@@ -227,15 +229,15 @@ class NoteModelTestCase(TestCase):
         """
         # check created object after loaded fixtures
         all_note = NoteModel.objects.all()
-        self.assertEqual(len(all_note), 1)
-        only_note = all_note[0]
+        self.assertEqual(len(all_note), 12)
+        only_note = all_note[11]
         self.assertEqual(only_note.model, 'Contact')
 
         # delete object Person
         only_note.delete()
 
         # now NoteModel is empty
-        self.assertEqual(NoteModel.objects.count(), 0)
+        self.assertEqual(NoteModel.objects.count(), 11)
 
     def test_processor_not_creates_entry_db_if_change_inst_NoteModel(self):
         """
@@ -244,8 +246,8 @@ class NoteModelTestCase(TestCase):
         """
         # check created object after loaded fixtures
         all_note = NoteModel.objects.all()
-        self.assertEqual(len(all_note), 1)
-        only_note = all_note[0]
+        self.assertEqual(len(all_note), 12)
+        only_note = all_note[11]
         self.assertEqual(only_note.model, 'Contact')
 
         # change object Person
@@ -254,6 +256,6 @@ class NoteModelTestCase(TestCase):
 
         # now NoteModel has only one instance
         all_note = NoteModel.objects.all()
-        self.assertEqual(len(all_note), 1)
-        only_note = all_note[0]
+        self.assertEqual(len(all_note), 12)
+        only_note = all_note[11]
         self.assertEqual(only_note.model, 'RequestStore')

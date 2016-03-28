@@ -15,20 +15,18 @@ logger = logging.getLogger(__name__)
 
 @register.inclusion_tag('templatetags/edit_link.html')
 def edit_link(obj):
-    if isinstance(obj, models.Model):
-        model = ContentType.objects.get_for_model(obj)
-
-        if model.model_class() in admin.site._registry:
-            edit_link = '/admin/%s/%s/%d/' %\
-                    (model.app_label, model.model, int(obj.id))
-            return {
-                'edit_link': edit_link,
-            }
-        else:
-            logger.debug(
-                'Set edit link for not register in admin "%s" model' % model)
-    else:
+    if not isinstance(obj, models.Model):
         raise TypeError(
             'Invalide type arg for edit_link, shoud be models.Model instance')
 
-    return None
+    model = ContentType.objects.get_for_model(obj)
+
+    if model.model_class() in admin.site._registry:
+        edit_link = '/admin/%s/%s/%d/' %\
+                (model.app_label, model.model, int(obj.id))
+        return {
+            'edit_link': edit_link,
+        }
+    else:
+        logger.debug(
+            'Set edit link for not register in admin "%s" model' % model)
