@@ -4,6 +4,7 @@ var helloRequest = (function($){
 
     var items = [];
     var id = data[0];
+    
     $.each(JSON.parse(data[1]), function(i, val) {
         var req_class = 'old';
         if (parseInt(val.fields.new_request, 10) == 1){
@@ -23,26 +24,31 @@ var helloRequest = (function($){
    $('td').addClass('text-center');
    $('th').addClass('text-center');
    $('title').text(pre_titile + title);
-}
+ }
 
  return {
      loadRequest: function(){
-         $.ajax({
+        var viewed = '';
+        if ( document.hasFocus() ) {
+            viewed = 'yes';
+        } 
+        $.ajax({
             url: '/requests_ajax/',
             dataType : "json",
+            data: {'viewed': viewed},
             success: function(data, textStatus) {
                 handleRequest(data);
             },
             error: function(jqXHR) {
                 console.log(jqXHR.responseText);
             }
-         });
+        });
      }
  };
 })(jQuery);
 
-
 $(document).ready(function(){
     helloRequest.loadRequest();
     setInterval(helloRequest.loadRequest, 500);
+    
 });

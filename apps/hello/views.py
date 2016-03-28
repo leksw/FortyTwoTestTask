@@ -20,13 +20,15 @@ def home_page(request):
 
 
 def request_view(request):
-    RequestsStore.objects.filter(new_request=1).update(new_request=0)
     return render(request, 'requests.html')
 
 
 @not_record_request
 def request_ajax(request):
     if request.is_ajax():
+        viewed = request.GET.get('viewed')
+        if viewed == 'yes':
+            RequestsStore.objects.filter(new_request=1).update(new_request=0)
         new_request = RequestsStore.objects.filter(new_request=1).count()
         request_list = RequestsStore.objects.all()[:10]
         list = serializers.serialize("json", request_list)
