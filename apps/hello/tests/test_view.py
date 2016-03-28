@@ -137,6 +137,10 @@ class RequestViewTest(TestCase):
 
         # send request to requests page
         response = self.client.get(reverse('hello:requests'))
+        self.client.get(
+            reverse('hello:requests_ajax'),
+            {'viewed': 'yes'},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
         # check that new_request = 1
         all_requests = RequestsStore.objects.all()
