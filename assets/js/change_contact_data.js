@@ -7,7 +7,7 @@ function csrfSafeMethod(method) {
 
 
 $(document).ready(function(){
-    $('.datepicker').datepicker();
+    $('.datepicker').datepicker({dateFormat: 'yy-mm-dd'});
     
     function block_form() {
         $("#loading").show();
