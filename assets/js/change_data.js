@@ -7,7 +7,7 @@ function csrfSafeMethod(method) {
 
 
 $(document).ready(function(){
-    $('.datepicker').datepicker();
+    $('.datepicker').datepicker({dateFormat: 'yy-mm-dd'});
     
     function block_form() {
         $("#loading").show();
@@ -99,7 +99,6 @@ $(document).ready(function(){
             .fail(function(data){
                 unblock_form();
                 $("#form_ajax_error").show();
-                console.log(data);
                 var errors = JSON.parse(data.responseText);
                 $.each(errors, function(i, val) {
                    var id = '#id_' + i;
