@@ -35,7 +35,7 @@ class ContactForm(ModelForm):
         }
 
     class Media:
-        js = ('js/change_contact.js',)
+        js = ('js/edit_data_contact.js',)
 
 
 class LoginForm(AuthenticationForm):
