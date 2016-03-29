@@ -303,7 +303,12 @@ class FormPageTest(TestCase):
         # login on the site
         self.client.login(username='admin', password='admin')
 
-        # send new data to server
+        # check that test.jpg isn't at form page
+        response = self.client.get(reverse('hello:form'))
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn('test.jpg', response.content)
+
+        # send new contact data to server
         self.client.post(reverse('hello:form'), self.data,
                          HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
@@ -311,7 +316,7 @@ class FormPageTest(TestCase):
         self.assertEqual(response1.status_code, 200)
         self.assertIn('test.jpg', response1.content)
 
-        self.data.update({'image-clear': 'on'})
+        self.data.update({'image-clear': 'on', 'image': ''})
 
         # send new data to server
         self.client.post(reverse('hello:form'), self.data,

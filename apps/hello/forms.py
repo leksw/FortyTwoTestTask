@@ -32,11 +32,10 @@ class ContactForm(ModelForm):
                   'email', 'jabber', 'skype_id', 'other', 'image']
         widgets = {
             'date_of_birth': CalendarWidget(format='%Y-%m-%d'),
-            'image': forms.FileInput()
         }
 
     class Media:
-        js = ('js/change_data.js',)
+        js = ('js/change_contact.js',)
 
 
 class LoginForm(AuthenticationForm):
