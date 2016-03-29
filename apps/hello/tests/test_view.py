@@ -320,3 +320,33 @@ class FormPageTest(TestCase):
         # data in db did not change
         edit_person = Contact.objects.first()
         self.assertEqual(self.person.name, edit_person.name)
+
+    def test_form_page_delete_image(self):
+        """
+        Test check delete image at form page
+        """
+        # login on the site
+        self.client.login(username='admin', password='admin')
+
+        # check that test.jpg isn't at form page
+        response = self.client.get(reverse('hello:form'))
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn('test.jpg', response.content)
+
+        # send new contact data to server
+        self.client.post(reverse('hello:form'), self.data,
+                         HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+
+        response1 = self.client.get(reverse('hello:form'))
+        self.assertEqual(response1.status_code, 200)
+        self.assertIn('test.jpg', response1.content)
+
+        self.data.update({'image-clear': 'on', 'image': ''})
+
+        # send new data to server
+        self.client.post(reverse('hello:form'), self.data,
+                         HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+
+        response2 = self.client.get(reverse('hello:form'))
+        self.assertEqual(response2.status_code, 200)
+        self.assertNotIn('test.jpg', response2.content)

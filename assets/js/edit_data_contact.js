@@ -28,9 +28,7 @@ $(document).ready(function(){
         }
         block_form();
     }
-    
 
-    
     var validator = $('#person-form').validate({
         rules:{
             focusInvalid: false,
@@ -59,6 +57,10 @@ $(document).ready(function(){
             }
             },
         submitHandler: function(form) {
+            if ($("#id_image").val() &&  $("#image-clear_id").prop('checked')){
+                alert('Please either submit a file or check the clear checkbox, not both.');
+                return false;
+            }
             var formData = new FormData($(form)[0]);
             $.ajax({
                 url: $(form).attr('action'),
@@ -86,7 +88,22 @@ $(document).ready(function(){
             .done(function(e){
                 var new_person = JSON.parse(e);
                 var image_link = new_person[0].fields.image;
-                $('#personImage').attr('src', '/uploads/'+ image_link);
+                if (image_link == "") {
+                    $('#personImage').attr('src', '');
+                    var inp = $('#id_image');
+                    var err = $('#error_photo');
+                    $("#image-clear_id").parent().attr('id', 'empty');
+                    $("#empty").empty();
+                    $("#empty").append(inp).append(err).attr('id', '');
+                } else {
+                    $('<span>Currently:</span> <a href="/uploads/' + image_link + 
+                     '">' + image_link + '</a> <input id="image-clear_id" name="image-clear"\
+                     type="checkbox" /> <label for="image-clear_id"> \
+                     Clear</label><br /><span>Change:</span>').insertBefore($("#id_image"));
+                     
+                    $('#personImage').attr('src', '/uploads/'+ image_link);
+                    $("#id_image").val('');
+                }
                 unblock_form();
                 $("#form_ajax").show();
                 
@@ -97,6 +114,7 @@ $(document).ready(function(){
                 
            })
             .fail(function(data){
+                console.log(data);
                 unblock_form();
                 $("#form_ajax_error").show();
                 var errors = JSON.parse(data.responseText);
