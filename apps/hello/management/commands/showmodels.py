@@ -7,9 +7,6 @@ from django.core.management.base import NoArgsCommand
 from django.contrib.contenttypes.models import ContentType
 
 
-logger = logging.getLogger(__name__)
-
-
 class Command(NoArgsCommand):
     help = "Whatch existing models and number of objects"
 
@@ -20,5 +17,3 @@ class Command(NoArgsCommand):
                   (mcl.__module__, mcl.__name__, mcl._default_manager.count())
             self.stdout.write(msg)
             self.stderr.write("error:  %s" % msg)
-
-            logger.info(msg)
