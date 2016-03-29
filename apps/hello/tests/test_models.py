@@ -195,11 +195,6 @@ class NoteModelTestCase(TestCase):
         person_note_change = NoteModel.objects.get(model='RequestStore')
         self.assertEqual(person_note_change.action_type, 1)
 
-        # delete note person
-        NoteModel.objects.all().delete()
-        all_note = NoteModel.objects.all()
-        self.assertEqual(all_note.count(), 0)
-
     def test_signal_processor_creates_entry_db(self):
         """
         Test signal processor records create,
