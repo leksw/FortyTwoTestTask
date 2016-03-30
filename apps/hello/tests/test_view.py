@@ -145,7 +145,7 @@ class RequestViewTest(TestCase):
         # check that new_request = 0
         all_requests = RequestsStore.objects.all()
         self.assertEquals(len(all_requests), 2)
-        home_request = all_requests[1]
+        home_request = all_requests[0]
 
         self.assertEquals(home_request.path, '/requests/')
         self.assertEquals(home_request.new_request, 0)

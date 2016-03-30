@@ -4,7 +4,7 @@ var helloRequest = (function($){
 
     var items = [];
     var id = data[0];
-    
+
     $.each(JSON.parse(data[1]), function(i, val) {
         var req_class = 'old';
         if (parseInt(val.fields.new_request, 10) == 1){
@@ -15,8 +15,8 @@ var helloRequest = (function($){
                     + '<td>' + val.fields.method + '</td>'
                     + '<td>' + val.fields.date + '</td>'
                     + '<td class="priority">' + val.fields.priority + '</td>'
-                    + '<td class="td_click">Up</td>'
-                    + '<td class="td_click">Down</td>'
+                    + '<td class="td_click plus"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></td>'
+                    + '<td class="td_click"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></td>'
                     + '</tr>'
         );
         

@@ -79,7 +79,7 @@ class RequestsStore(models.Model):
         return "%s - %s" % (self.path, self.method)
 
     class Meta:
-        ordering = ["-priority"]
+        ordering = ["-priority", "-date"]
 
 
 class NoteModel(models.Model):

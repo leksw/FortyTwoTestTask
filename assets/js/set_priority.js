@@ -22,7 +22,7 @@ $(document).ready(function(){
         str_priority = $(this).closest("tr").find('.priority').text();
         priority = parseInt(str_priority, 10);
 
-        if ($(this).text() == 'Up'){
+        if ($(this).hasClass('plus')){
             priority += 1;
         }else{
             priority = priority > 0 ? priority -= 1 : 0;
