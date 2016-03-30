@@ -13,9 +13,10 @@ class CalendarWidget(forms.DateInput):
     class Media:
         js = ('https://code.jquery.com/ui/1.11.0/jquery-ui.js',)
 
-    def __init__(self, attrs={}):
+    def __init__(self, attrs={}, *args, **kwargs):
         super(CalendarWidget, self).__init__(
-            attrs={'class': 'form-control datepicker', 'size': '10'})
+            attrs={'class': 'form-control datepicker', 'size': '10'},
+            *args, **kwargs)
 
 
 class ContactForm(ModelForm):
@@ -30,12 +31,11 @@ class ContactForm(ModelForm):
         fields = ['name', 'surname', 'date_of_birth', 'bio',
                   'email', 'jabber', 'skype_id', 'other', 'image']
         widgets = {
-            'date_of_birth': CalendarWidget(),
-            'image': forms.FileInput()
+            'date_of_birth': CalendarWidget(format='%Y-%m-%d'),
         }
 
     class Media:
-        js = ('js/change_contact.js',)
+        js = ('js/edit_data_contact.js',)
 
 
 class LoginForm(AuthenticationForm):

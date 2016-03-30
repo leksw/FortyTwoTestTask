@@ -10,8 +10,6 @@ from .models import NoteModel
 @receiver([post_save, post_delete],
           dispatch_uid='request_store')
 def models_handler(sender, **kwargs):
-    if sender._meta.app_label != 'hello':
-        return
     if sender._meta.model_name == 'notemodel':
         return
 

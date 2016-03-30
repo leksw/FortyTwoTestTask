@@ -24,7 +24,6 @@ def home_page(request):
 
 
 def request_view(request):
-    RequestsStore.objects.filter(new_request=1).update(new_request=0)
     return render(request, 'requests.html')
 
 
@@ -39,6 +38,10 @@ def request_ajax(request):
                                     .update(priority=priority)
             return HttpResponse(json.dumps({'response': 'ok'}),
                                 content_type='application/json')
+
+        viewed = request.GET.get('viewed')
+        if viewed == 'yes':
+            RequestsStore.objects.filter(new_request=1).update(new_request=0)
 
         new_request = RequestsStore.objects.filter(new_request=1).count()
         request_list = RequestsStore.objects.all()[:10]
@@ -72,7 +75,7 @@ def form_page(request):
                 return HttpResponse(json.dumps(list_pers),
                                     content_type="application/json")
             else:
-                return redirect('hello:success')
+                return redirect('hello:home')
         else:
             if request.is_ajax():
                 if getattr(settings, 'DEBUG', False):
