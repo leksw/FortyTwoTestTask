@@ -215,6 +215,34 @@ class RequestAjaxTest(TestCase):
         self.assertIn('/test6', response.content)
         self.assertIn('/', response.content)
 
+    def test_request_ajax_view_change_request_priority(self):
+        """
+        Test request ajax view change request priority
+        when it is received id and priority
+        """
+        self.client.get(reverse('hello:home'))
+
+        request = RequestsStore.objects.get(id=1)
+        self.assertEqual(request.priority, 0)
+
+        # increase priority from 0 to 2
+        self.client.post(reverse('hello:requests_ajax'),
+                         {'id': '1', 'priority': 2},
+                         HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+
+        # check priority is 2
+        request = RequestsStore.objects.get(id=1)
+        self.assertEqual(request.priority, 2)
+
+        # decrease priority from 2 to 1
+        self.client.post(reverse('hello:requests_ajax'),
+                         {'id': '1', 'priority': 1},
+                         HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+
+        # check priority is 1
+        request = RequestsStore.objects.get(id=1)
+        self.assertEqual(request.priority, 1)
+
 
 class FormPageTest(TestCase):
     fixtures = ['data.json']

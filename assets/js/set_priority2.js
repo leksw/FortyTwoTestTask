@@ -13,12 +13,13 @@ function beforeSendHandler(xhr, settings) {
 
 $(document).ready(function(){
     $('table').on('click', '.td_click', function(){
-        var path = '';
+        var id = '';
         var str_priority = '';
         var priority = 0;
         var data = {};
     
-        path = $(this).closest("tr").find('.path').text();
+        id = $(this).closest("tr").attr('id');
+        console.log(id);
         str_priority = $(this).closest("tr").find('.priority').text();
         priority = parseInt(str_priority, 10);
 
@@ -29,7 +30,7 @@ $(document).ready(function(){
         }
 
         data = {
-            'path': path,
+            'id': id,
             'priority': priority
         };
         

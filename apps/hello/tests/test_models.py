@@ -194,32 +194,6 @@ class RequestsStoreTest(TestCase):
         request_store = RequestsStore.objects.all()[1]
         self.assertEqual(request_store.method, 'POST')
 
-    def test_priority_creating_request_accord_priority_same_as_changed(self):
-        """
-        Test check when change priority field another
-        creating analog request has same priority.
-        """
-
-        # pass to home page
-        self.client.get(reverse('hello:home'))
-        request_store = RequestsStore.objects.first()
-
-        # change priority to 1 and send POST to home page
-        request_store.priority = 1
-        request_store.save()
-
-        # pass to home page again
-        self.client.post(reverse('hello:home'))
-
-        # check record RequestStore contains:
-        # method - 'GET' and priority - 1
-        all_requests = RequestsStore.objects.all()
-        self.assertEquals(len(all_requests), 2)
-        first_request = all_requests[0]
-        second_request = all_requests[1]
-
-        self.assertEqual(first_request.priority, second_request.priority)
-
 
 class NoteModelTestCase(TestCase):
     fixtures = ['data.json']
