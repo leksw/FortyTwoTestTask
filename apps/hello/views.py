@@ -31,12 +31,11 @@ def request_view(request):
 def request_ajax(request):
     if request.is_ajax():
         if request.method == 'POST':
-            id = request.POST['id']
+            path = request.POST['path']
             priority = request.POST['priority']
             if int(priority) >= 0:
-                req = RequestsStore.objects.get(id=id)
-                req.priority = priority
-                req.save()
+                RequestsStore.objects.filter(path=path)\
+                                    .update(priority=priority)
             return HttpResponse(json.dumps({'response': 'ok'}),
                                 content_type='application/json')
 
