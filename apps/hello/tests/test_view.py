@@ -243,6 +243,27 @@ class RequestAjaxTest(TestCase):
         self.assertEquals(only_req.method, 'GET')
         self.assertEquals(only_req.priority, 1)
 
+    def test_requests_ajax_view_sort_requests_list(self):
+        """
+        Test requests_ajax view sort requests list by path.
+        """
+        self.client.get(reverse('hello:home'))
+        self.client.get(reverse('hello:form'))
+        self.client.get(reverse('hello:home'))
+
+        # now in RequestsStore
+        all_req = RequestsStore.objects.all()
+        self.assertEquals(all_req[0].path, '/')
+        self.assertEquals(all_req[1].path, '/form/')
+        self.assertEquals(all_req[2].path, '/')
+
+        # check that response is sorted by path
+        response = self.client.get(reverse('hello:requests_ajax'),
+                                   HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual('"path\\": \\"/\\"', (response.content[-453:-439]))
+        self.assertEqual('"path\\": \\"/\\"', (response.content[-259:-245]))
+        self.assertEqual('"path\\": \\"/form/\\"', (response.content[-65:-46]))
+
 
 class FormPageTest(TestCase):
     fixtures = ['data.json']

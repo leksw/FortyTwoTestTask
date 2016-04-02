@@ -187,12 +187,13 @@ class RequestsStoreTest(TestCase):
         # change priority to 1 and send POST to home page
         request_store.priority = 1
         request_store.save()
-        self.client.post(reverse('hello:form'))
+        self.client.post(reverse('hello:home'))
 
         # check record RequestStore contains:
         # method - 'POST' and priority - 1
-        request_store = RequestsStore.objects.all()[1]
+        request_store = RequestsStore.objects.get(method='POST')
         self.assertEqual(request_store.method, 'POST')
+        self.assertEqual(request_store.priority, 1)
 
 
 class NoteModelTestCase(TestCase):

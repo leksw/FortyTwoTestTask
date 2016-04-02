@@ -45,6 +45,8 @@ def request_ajax(request):
 
         new_request = RequestsStore.objects.filter(new_request=1).count()
         request_list = RequestsStore.objects.all()[:10]
+        request_list = list(request_list)
+        request_list.sort(key=lambda a: a.path)
         list_req = serializers.serialize("json", request_list)
         data = json.dumps((new_request, list_req))
         return HttpResponse(data, content_type="application/json")
