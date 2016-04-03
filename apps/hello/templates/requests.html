@@ -13,7 +13,7 @@
     </div>
 </div>
 <div class="row">
-     <div class="col-md-6">
+     <div class="col-md-12">
         <table id="request" class="table table-bordered">
             <caption>Requests</caption>
             <thead>
@@ -21,6 +21,9 @@
                     <th>Path</th>
                     <th>Method</th>
                     <th>Date</th>
+                    <th>Priority</th>
+                    <th>Increase Priority</th>
+                    <th>Decrease Priority</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,4 +33,7 @@
 </div>   
 {% endblock content %}
 
-{% block script %}<script src="{% static 'js/load_requests.js' %}"></script>{% endblock script %}
+{% block script %}
+<script src="{% static 'js/load_request_sort.js' %}"></script>
+<script src="{% static 'js/set_priority3.js' %}"></script>
+{% endblock script %}

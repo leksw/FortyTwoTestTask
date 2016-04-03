@@ -142,12 +142,12 @@ class RequestViewTest(TestCase):
             {'viewed': 'yes'},
             HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
-        # check that new_request = 1
+        # check that new_request = 0
         all_requests = RequestsStore.objects.all()
         self.assertEquals(len(all_requests), 2)
-        home_request = all_requests[1]
+        home_request = all_requests[0]
 
-        self.assertEquals(home_request.path, '/')
+        self.assertEquals(home_request.path, '/requests/')
         self.assertEquals(home_request.new_request, 0)
 
         self.assertEqual(response.status_code, 200)
@@ -195,7 +195,7 @@ class RequestAjaxTest(TestCase):
         for i in range(1, 15):
             path = '/test%s' % i
             method = 'GET'
-            RequestsStore.objects.create(path=path, method=method)
+            RequestsStore.objects.create(path=path, method=method, priority=i)
 
         self.client.get(reverse('hello:home'))
         request_store_count = RequestsStore.objects.count()
@@ -214,6 +214,55 @@ class RequestAjaxTest(TestCase):
         self.assertNotIn('/test4', response.content)
         self.assertIn('/test6', response.content)
         self.assertIn('/', response.content)
+
+    def test_requests_ajax_change_priority(self):
+        """
+        Test requests_ajax view, changing priority for same requests.
+        """
+        self.client.get(reverse('hello:home'))
+
+        # check request: path - '/', priority - 0
+        all_req = RequestsStore.objects.all()
+        self.assertEquals(len(all_req), 1)
+        only_req = all_req[0]
+        self.assertEqual(only_req.path, '/')
+        self.assertEqual(only_req.method, 'GET')
+        self.assertEqual(only_req.priority, 0)
+
+        data = {'path': '/', 'priority': 1}
+        # send new priority
+        self.client.post(
+            reverse('hello:requests_ajax'),
+            data,
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+
+        all_req = RequestsStore.objects.all()
+        self.assertEquals(len(all_req), 1)
+        only_req = all_req[0]
+        self.assertEquals(only_req.path, '/')
+        self.assertEquals(only_req.method, 'GET')
+        self.assertEquals(only_req.priority, 1)
+
+    def test_requests_ajax_view_sort_requests_list(self):
+        """
+        Test requests_ajax view sort requests list by path.
+        """
+        self.client.get(reverse('hello:home'))
+        self.client.get(reverse('hello:form'))
+        self.client.get(reverse('hello:home'))
+
+        # now in RequestsStore
+        all_req = RequestsStore.objects.all()
+        self.assertEquals(all_req[0].path, '/')
+        self.assertEquals(all_req[1].path, '/form/')
+        self.assertEquals(all_req[2].path, '/')
+
+        # check that response is sorted by path
+        response = self.client.get(reverse('hello:requests_ajax'),
+                                   HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual('"path\\": \\"/\\"', (response.content[-453:-439]))
+        self.assertEqual('"path\\": \\"/\\"', (response.content[-259:-245]))
+        self.assertEqual('"path\\": \\"/form/\\"', (response.content[-65:-46]))
 
 
 class FormPageTest(TestCase):

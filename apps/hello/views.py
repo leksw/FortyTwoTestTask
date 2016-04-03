@@ -30,13 +30,25 @@ def request_view(request):
 @not_record_request
 def request_ajax(request):
     if request.is_ajax():
+        if request.method == 'POST':
+            path = request.POST['path']
+            priority = request.POST['priority']
+            if int(priority) >= 0:
+                RequestsStore.objects.filter(path=path)\
+                                    .update(priority=priority)
+            return HttpResponse(json.dumps({'response': 'ok'}),
+                                content_type='application/json')
+
         viewed = request.GET.get('viewed')
         if viewed == 'yes':
             RequestsStore.objects.filter(new_request=1).update(new_request=0)
+
         new_request = RequestsStore.objects.filter(new_request=1).count()
         request_list = RequestsStore.objects.all()[:10]
-        list = serializers.serialize("json", request_list)
-        data = json.dumps((new_request, list))
+        request_list = list(request_list)
+        request_list.sort(key=lambda a: a.path)
+        list_req = serializers.serialize("json", request_list)
+        data = json.dumps((new_request, list_req))
         return HttpResponse(data, content_type="application/json")
 
     return HttpResponseBadRequest('Error request')

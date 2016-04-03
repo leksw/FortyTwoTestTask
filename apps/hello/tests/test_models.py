@@ -9,6 +9,7 @@ from django.test import TestCase
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from django.contrib.auth import get_user_model
+from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from ..models import Contact, RequestsStore, NoteModel
@@ -160,6 +161,39 @@ class RequestsStoreTest(TestCase):
         self.assertEquals(only_request.method, 'GET')
         self.assertEquals(only_request.new_request, 1)
         self.assertEquals(only_request.user, user)
+
+    def test_record_priority_field_default(self):
+        """
+        Test record priority field default.
+        """
+        # pass to home page
+        self.client.get(reverse('hello:home'))
+        request_store = RequestsStore.objects.first()
+
+        # check record RequestStore contains:
+        # method - 'GET' and default priority - 0
+        self.assertEqual(request_store.path, '/')
+        self.assertEqual(request_store.method, 'GET')
+        self.assertEqual(request_store.priority, 0)
+
+    def test_change_record_priority_field(self):
+        """
+        Test check when change priority field.
+        """
+        # pass to home page
+        self.client.get(reverse('hello:home'))
+        request_store = RequestsStore.objects.first()
+
+        # change priority to 1 and send POST to home page
+        request_store.priority = 1
+        request_store.save()
+        self.client.post(reverse('hello:home'))
+
+        # check record RequestStore contains:
+        # method - 'POST' and priority - 1
+        request_store = RequestsStore.objects.get(method='POST')
+        self.assertEqual(request_store.method, 'POST')
+        self.assertEqual(request_store.priority, 1)
 
 
 class NoteModelTestCase(TestCase):
